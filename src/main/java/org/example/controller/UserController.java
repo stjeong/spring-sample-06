@@ -43,7 +43,7 @@ public class UserController {
         return "success";
     }
 
-    // @Autowired
+    @Autowired
     private UserMapper mapper;
 
     @RequestMapping("/lists")

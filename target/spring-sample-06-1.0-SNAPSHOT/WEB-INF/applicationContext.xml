@@ -3,10 +3,18 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd" >
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:tx="http://www.springframework.org/schema/tool"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://mybatis.org/schema/mybatis-spring https://mybatis.org/schema/mybatis-spring.xsd
+        http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd">
 
     <mvc:annotation-driven />
     <context:component-scan base-package="org.example" />
+    <mybatis:scan base-package="org.example.repository" />
+<!--    <tx:annotation-driven proxy-target-class="true" />-->
 
     <bean id="contentNegotiatingViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="viewResolvers">
@@ -18,4 +26,21 @@
             </list>
         </property>
     </bean>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+<!--        <property name="url" value="jdbc:mysql://localhost:3306/test?characterEncoding=utf8&amp;useUnicode=true&amp;mysqlEncoding=utf8" />-->
+        <property name="url" value="jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul&amp;useSSL=false" />
+        <property name="username" value="testusr" />
+        <property name="password" value="testusr@100420" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+<!--        <property name="configLocation" ref="classpath:mybatis.xml" />-->
+    </bean>
+
+<!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+<!--        <property name="dataSource" ref="dataSource" />-->
+<!--    </bean>-->
 </beans>
