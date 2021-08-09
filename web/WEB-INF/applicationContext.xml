@@ -4,16 +4,18 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
-
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://mybatis.org/schema/mybatis-spring https://mybatis.org/schema/mybatis-spring.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <mvc:annotation-driven />
-    <context:component-scan base-package="org.example" />
+    <context:component-scan base-package="org.example.controller" />
     <context:component-scan base-package="org.example.service" />
     <context:property-placeholder location="classpath:/config.properties" />
 
@@ -34,8 +36,6 @@
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 <!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">-->
         <property name="driverClassName" value="${jdbc.driverClassName}" />
-<!--        <property name="url" value="jdbc:mysql://localhost:3306/test?characterEncoding=utf8&amp;useUnicode=true&amp;mysqlEncoding=utf8" />-->
-<!--        <property name="url" value="jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul&amp;useSSL=false" />-->
         <property name="url" value="${jdbc.url}" />
         <property name="username" value="${jdbc.username}" />
         <property name="password" value="${jdbc.password}" />
@@ -50,4 +50,6 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
+    <aop:aspectj-autoproxy />
+    <bean id="userServiceAspect" class="org.example.aop.AopTester" />
 </beans>
