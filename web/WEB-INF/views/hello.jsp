@@ -7,5 +7,7 @@
 <body>
 SpringVersion: <% System.out.println(SpringVersion.getVersion()); %> <br />
 Hello, ${var1}
+
+
 </body>
 </html>

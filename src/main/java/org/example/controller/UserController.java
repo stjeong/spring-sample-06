@@ -4,7 +4,7 @@ import org.example.domain.Searchable;
 import org.example.domain.User;
 import org.example.repository.UserMapper;
 import org.example.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -13,7 +13,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.naming.Binding;
 import java.util.List;
 
 @Controller
@@ -109,5 +108,42 @@ public class UserController {
         model.addAttribute("list", userMapper.findByProvider(searchable));
 
         return "list";
+    }
+
+    @RequestMapping("/signout")
+    @ResponseBody
+    public String signout() {
+        // System.out.println("User.current() = " + User.current());
+        return "signout";
+    }
+
+    @RequestMapping("/onlyUserByXml")
+    @ResponseBody
+    public String onlyUserByXml() {
+        // System.out.println("User.current() = " + User.current());
+        return "user";
+    }
+
+    @RequestMapping("/onlyAdminByXml")
+    @ResponseBody
+    public String onlyAdminByXml() {
+        // System.out.println("User.current() = " + User.current());
+        return "admin";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping("/onlyUserByJava")
+    @ResponseBody
+    public String onlyUserByJava() {
+        // System.out.println("User.current() = " + User.current());
+        return "user";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping("/onlyAdminByJava")
+    @ResponseBody
+    public String onlyAdminByJava() {
+        // System.out.println("User.current() = " + User.current());
+        return "admin";
     }
 }

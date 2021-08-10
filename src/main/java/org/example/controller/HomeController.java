@@ -1,12 +1,13 @@
 package org.example.controller;
 
+import org.example.domain.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
@@ -19,9 +20,34 @@ public class HomeController {
         return "hello";
     }
 
+    @RequestMapping("/sessionTest")
+    @ResponseBody
+    public String sessionTest(HttpSession session) {
+        session.setAttribute("a", 3);
+        session.removeAttribute("a");
+        return "success";
+    }
+
+    @RequestMapping("/sessionTest2")
+    @ResponseBody
+    public String sessionTest2(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("a", 3);
+        session.removeAttribute("a");
+        return "sessionTest2";
+    }
+
     @RequestMapping(value="/reqTest", method=RequestMethod.GET)
     public String reqTest(Model model) {
         model.addAttribute("var1", "world");
+
+        try {
+            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            System.out.println(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return "hello";
     }
 
@@ -41,9 +67,13 @@ public class HomeController {
     @RequestMapping(value="mapTest")
     public String mapTest(@RequestParam Map<String, String> map) {
 
+        map.forEach((key, value) -> System.out.println(key + "=" + value) );
+
+        /* Raw use of parameterized class 'Map.Entry'
         for (Map.Entry entry: map.entrySet()) {
             System.out.println(entry.getKey() + "=" + entry.getValue());
         }
+        */
 
         return "hello";
     }
